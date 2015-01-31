@@ -39,7 +39,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DDDTalk.Application\DDDTalk.Application.csproj">
+      <Project>{e64d0614-2947-4938-945b-40e36fbab8ad}</Project>
+      <Name>DDDTalk.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DDDTalk.Business\DDDTalk.Business.csproj">
+      <Project>{02b6baca-4be8-4361-8c03-077b7b8ef1d9}</Project>
+      <Name>DDDTalk.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DDDTalk.Data\DDDTalk.Data.csproj">
+      <Project>{9418cafe-6483-47c4-b365-b42348d67918}</Project>
+      <Name>DDDTalk.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DDDTalk.Infrastructure\DDDTalk.Infrastructure.csproj">
+      <Project>{f8d84c9e-f0a7-4fcb-87b6-c9bf7e704980}</Project>
+      <Name>DDDTalk.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DDDTalk.Presentation\DDDTalk.Presentation.csproj">
+      <Project>{4649a3fa-a586-4d7c-ac56-0fa1f35ad2b2}</Project>
+      <Name>DDDTalk.Presentation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

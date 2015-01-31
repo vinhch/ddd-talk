@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDTalk.Data", "DDDTalk.Data\DDDTalk.Data.csproj", "{9418CAFE-6483-47C4-B365-B42348D67918}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDTalk.Application", "DDDTalk.Application\DDDTalk.Application.csproj", "{EA1A69CF-6302-4AE8-BCE1-1CD570913F79}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDTalk.Infrastructure", "DDDTalk.Infrastructure\DDDTalk.Infrastructure.csproj", "{F8D84C9E-F0A7-4FCB-87B6-C9BF7E704980}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDTalk.UnitTests", "DDDTalk.UnitTests\DDDTalk.UnitTests.csproj", "{7F9E5244-9C51-4401-BACD-6566F8D33E02}"
@@ -19,12 +17,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDTalk.BehaviourTests", "D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A20A2A95-F98D-415A-818D-6FEE0034697A}"
 	ProjectSection(SolutionItems) = preProject
+		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
+		Settings.StyleCop = Settings.StyleCop
 		Solution.dgml = Solution.dgml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDTalk.Presentation", "DDDTalk.Presentation\DDDTalk.Presentation.csproj", "{4649A3FA-A586-4D7C-AC56-0FA1F35AD2B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDTalk.Business", "DDDTalk.Business\DDDTalk.Business.csproj", "{02B6BACA-4BE8-4361-8C03-077B7B8EF1D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDTalk.Application", "DDDTalk.Application\DDDTalk.Application.csproj", "{E64D0614-2947-4938-945B-40E36FBAB8AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,10 +38,6 @@ Global
 		{9418CAFE-6483-47C4-B365-B42348D67918}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9418CAFE-6483-47C4-B365-B42348D67918}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9418CAFE-6483-47C4-B365-B42348D67918}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EA1A69CF-6302-4AE8-BCE1-1CD570913F79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA1A69CF-6302-4AE8-BCE1-1CD570913F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA1A69CF-6302-4AE8-BCE1-1CD570913F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA1A69CF-6302-4AE8-BCE1-1CD570913F79}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F8D84C9E-F0A7-4FCB-87B6-C9BF7E704980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F8D84C9E-F0A7-4FCB-87B6-C9BF7E704980}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8D84C9E-F0A7-4FCB-87B6-C9BF7E704980}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,6 +62,10 @@ Global
 		{02B6BACA-4BE8-4361-8C03-077B7B8EF1D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02B6BACA-4BE8-4361-8C03-077B7B8EF1D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02B6BACA-4BE8-4361-8C03-077B7B8EF1D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E64D0614-2947-4938-945B-40E36FBAB8AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E64D0614-2947-4938-945B-40E36FBAB8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E64D0614-2947-4938-945B-40E36FBAB8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E64D0614-2947-4938-945B-40E36FBAB8AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
