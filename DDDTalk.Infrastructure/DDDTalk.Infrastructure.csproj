@@ -42,7 +42,17 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DependencyInjection\ContainerFactory.cs" />
+    <Compile Include="DependencyInjection\DependencyInjectionContainer.cs" />
+    <Compile Include="DependencyInjection\IContainer.cs" />
+    <Compile Include="Navigation\IMainWindow.cs" />
+    <Compile Include="Persistence\IAggregateRoot.cs" />
+    <Compile Include="Persistence\IAuditable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Caching\" />
+    <Folder Include="Logging\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-using DDDTalk.Presentation;
+using DDDTalk.Application.Boostrapping;
 
 namespace DDDTalk.Application
 {
@@ -12,7 +12,10 @@ namespace DDDTalk.Application
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            var window = new MainWindow();
+            var applicationBootstrapper = new ApplicationBootstrapper();
+            applicationBootstrapper.Initialize();
+
+            var window = applicationBootstrapper.CreateMainWindow();
             window.Show();
         }
     }

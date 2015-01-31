@@ -1,17 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DirectedGraph xmlns="http://schemas.microsoft.com/vs/2009/dgml">
   <Nodes>
-    <Node Id="8315b4bb-2e91-4ca0-8c34-bdcbce63e3db" Bounds="-57.9917590840657,-198.272595727539,376.966670735677,223.880377459717" Group="Expanded" Label="Domain specific projects" UseManualLocation="True" />
-    <Node Id="Application" Bounds="-192.760193277995,-228.982760974121,80.1033333333333,25.96" UseManualLocation="True" />
-    <Node Id="Business" Bounds="-28.8396233550708,-89.3124279785156,64.9233333333333,25.96" UseManualLocation="True" />
-    <Node Id="CompositionRoot" Category="Comment" Bounds="-413.198156840007,-228.942860974121,178.83,25.96" Label="App Entry (Composition Root)" UseManualLocation="True" />
-    <Node Id="CoreDomain" Category="Comment" Bounds="95.0818322753906,-88.9827503967286,89.78,25.96" Label="Core Domain" UseManualLocation="True" />
-    <Node Id="Cross-cuttingConcerns" Category="Comment" Bounds="-371.591509288664,41.485806824581,141.376666666667,25.96" Label="Cross-cutting concerns" UseManualLocation="True" />
-    <Node Id="Data" Bounds="-23.2148361206055,-20.3523182678223,50,25.96" UseManualLocation="True" />
-    <Node Id="Infrastructure" Bounds="-197.659477945964,41.8179525436497,90.9933333333333,25.96" UseManualLocation="True" />
-    <Node Id="Persistance(DAL)" Category="Comment" Bounds="95.3268739827474,-20.7397664716113,111.546666666667,25.96" Label="Persistence (DAL)" UseManualLocation="True" />
-    <Node Id="Presentation" Bounds="-37.9917590840657,-158.272495727539,86.2966666666667,25.96" UseManualLocation="True" />
-    <Node Id="UI:Web,Desktop" Category="Comment" Bounds="92.3049116516112,-158.232822875977,206.67,25.96" Label="Web UI, Desktop UI or Web Service" UseManualLocation="True" />
+    <Node Id="8315b4bb-2e91-4ca0-8c34-bdcbce63e3db" Bounds="-74.8720004781087,-178.239178979492,376.96666692098,223.492929148865" Group="Expanded" Label="Domain specific projects" UseManualLocation="True" />
+    <Node Id="Application" Bounds="-174.841473074389,-253.948257861003,80.1033333333333,25.96" UseManualLocation="True" />
+    <Node Id="Business" Bounds="-45.7198637775995,-69.2790188598632,64.9233333333333,25.96" UseManualLocation="True" />
+    <Node Id="CompositionRoot" Category="Comment" Bounds="-52.4613789817893,-252.907526741394,178.83,25.96" Label="App Entry (Composition Root)" UseManualLocation="True" />
+    <Node Id="Core" Bounds="-218.822792053223,-31.9490109524682,50,25.96" UseManualLocation="True" />
+    <Node Id="CoreDomain" Category="Comment" Bounds="78.2015915548387,-68.9493279266357,89.78,25.96" Label="Core Domain" UseManualLocation="True" />
+    <Node Id="Cross-cuttingConcerns" Category="Comment" Bounds="-473.56345465135,-204.004390192691,141.376666666667,25.96" Label="Cross-cutting concerns" UseManualLocation="True" />
+    <Node Id="Data" Bounds="-39.0950806558547,-1.3188996124267,50,25.96" UseManualLocation="True" />
+    <Node Id="Implementations" Category="Comment" Bounds="-385.845333132688,-31.9155170227345,109.23,25.96" UseManualLocation="True" />
+    <Node Id="Infrastructure" Bounds="-238.865338083903,-105.154249294753,90.9933333333333,25.96" />
+    <Node Id="Interfaces" Category="Comment" Bounds="-350.345334065755,-104.658914669509,71.2766666666666,25.96" UseManualLocation="True" />
+    <Node Id="Non-domainSpecificProjects" Bounds="-405.845333132688,-145.154349294753,277.973328382118,159.198932272019" Group="Expanded" Label="Non-domain specific projects" UseManualLocation="True" />
+    <Node Id="Persistance(DAL)" Category="Comment" Bounds="78.446630413888,-0.706349830627413,111.546666666667,25.96" Label="Persistence (DAL)" UseManualLocation="True" />
+    <Node Id="Presentation" Bounds="-54.8719998046177,-138.239078979492,86.2966666666667,25.96" UseManualLocation="True" />
+    <Node Id="UI:Web,Desktop" Category="Comment" Bounds="75.4246709310594,-138.19940612793,206.67,25.96" Label="Web UI, Desktop UI or Web Service" UseManualLocation="True" />
   </Nodes>
   <Links>
     <Link Source="8315b4bb-2e91-4ca0-8c34-bdcbce63e3db" Target="Business" Category="Contains" />
@@ -20,21 +24,22 @@
     <Link Source="8315b4bb-2e91-4ca0-8c34-bdcbce63e3db" Target="Persistance(DAL)" Category="Contains" />
     <Link Source="8315b4bb-2e91-4ca0-8c34-bdcbce63e3db" Target="Presentation" Category="Contains" />
     <Link Source="8315b4bb-2e91-4ca0-8c34-bdcbce63e3db" Target="UI:Web,Desktop" Category="Contains" />
-    <Link Source="Application" Target="Business" Bounds="-138.180238457529,-203.02276184082,120.562463446363,107.714051302359" />
-    <Link Source="Application" Target="Data" Bounds="-143.096659482896,-203.02276184082,129.913968923669,175.437643290044" />
-    <Link Source="Application" Target="Infrastructure" Bounds="-152.682369789905,-203.02276184082,0.475257625673947,235.840734674067" />
-    <Link Source="Application" Target="Presentation" Bounds="-123.729863090422,-203.02276184082,91.69408622005,41.0712260169484" />
+    <Link Source="Application" Target="Business" Bounds="-126.247616942886,-227.98826171875,99.4995790697051,151.191210544502" />
+    <Link Source="Application" Target="Core" Bounds="-188.058344102784,-227.98826171875,49.816954704303,187.341512755681" />
+    <Link Source="Application" Target="Data" Bounds="-128.58856115079,-227.98826171875,104.412480994814,218.54855316789" />
+    <Link Source="Application" Target="Infrastructure" Bounds="-184.961646040202,-227.98826171875,45.0617266014952,114.459629286171" />
+    <Link Source="Application" Target="Presentation" Bounds="-120.984522659055,-227.98826171875,88.8986371390041,83.5842287426548" />
     <Link Source="Business" Target="Infrastructure" Bounds="-129.856945553639,-63.3524317932129,118.058554802214,99.3746353347854" />
     <Link Source="Business" Target="Infrastructure" Index="1" />
-    <Link Source="CompositionRoot" Target="Application" Bounds="-234.368157348633,-215.99132094799,32.6079643154455,0.0076055362105194" />
-    <Link Source="CoreDomain" Target="Business" Bounds="45.0836836707067,-76.232178660681,49.9981486046839,0.120889580035936" />
-    <Link Source="Cross-cuttingConcerns" Target="Infrastructure" Bounds="-230.214834391276,54.6236579507651,23.5553712557974,0.0526010929749674" />
-    <Link Source="Data" Target="Business" Bounds="2.13091006700938,-54.3556191261606,0.905740496000862,34.0033008583382" />
-    <Link Source="Data" Target="Infrastructure" Bounds="-111.676139232756,2.72277672379886,88.4635117346689,35.7250582968836" />
-    <Link Source="Persistance(DAL)" Target="Data" Bounds="35.7851335802411,-7.61504376101257,59.5417404025063,0.154501112804503" />
-    <Link Source="Presentation" Target="Business" Bounds="4.11110274883193,-132.312495727539,0.756634609447315,34.002295195109" />
-    <Link Source="Presentation" Target="Infrastructure" Bounds="-136.394706238875,-132.312495727539,131.34586728495,167.055397308688" />
-    <Link Source="UI:Web,Desktop" Target="Presentation" Bounds="57.3049073873985,-145.281634551396,35.0000042642127,0.00728961384652393" />
+    <Link Source="Core" Target="Infrastructure" Bounds="-193.742272052351,-70.1944224589636,0.237251199370206,38.2454115064953" />
+    <Link Source="Data" Target="Business" Bounds="-13.9352407224757,-34.3197030829479,0.406383106157044,33.0008034705212" />
+    <Link Source="Data" Target="Infrastructure" Bounds="-163.170490235695,-74.6834451345947,126.704866960298,73.3875170854815" />
+    <Link Source="Non-domainSpecificProjects" Target="Core" Category="Contains" />
+    <Link Source="Non-domainSpecificProjects" Target="Implementations" Category="Contains" />
+    <Link Source="Non-domainSpecificProjects" Target="Infrastructure" Category="Contains" />
+    <Link Source="Non-domainSpecificProjects" Target="Interfaces" Category="Contains" />
+    <Link Source="Presentation" Target="Business" Bounds="-12.7691377247322,-112.279078979492,0.756633884624726,34.0022856553493" />
+    <Link Source="Presentation" Target="Infrastructure" Bounds="-139.017681394406,-117.400039297871,84.1456809162975,15.3262987065908" />
   </Links>
   <Categories>
     <Category Id="Comment" Label="Comment" Description="Represents a user defined comment on the diagram" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="Comments" />
