@@ -5,6 +5,16 @@ using DDDTalk.Infrastructure.Persistence;
 
 namespace DDDTalk.Business.Products
 {
+    /// <remark>
+    /// Entity
+    /// - Has an identity (two Entities with the same identities are equals)
+    /// Aggregate Root
+    /// - Boundary around objects inside (can't access objects directly, must go throught the Root)
+    /// - Enforce invariants of the Entities inside
+    /// - Root Entity has global identity
+    /// - Internal Entities have local identity
+    /// - Contains no direct references to other Aggregate, only IDs
+    /// </remark>
     public class Product : IAggregateRoot, IAuditable
     {
         public int Id { get; set; }
