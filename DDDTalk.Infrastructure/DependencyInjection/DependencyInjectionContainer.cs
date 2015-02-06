@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace DDDTalk.Infrastructure.DependencyInjection
 {
+    /// <summary>
+    /// DI Container
+    /// ! Please use a proper DI Container (Unity, AutoFac, StructureMap, etc.)
+    /// </summary>
     public class DependencyInjectionContainer : IContainer
     {
         private readonly Dictionary<Type, Type> registry;

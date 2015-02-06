@@ -2,9 +2,12 @@
 
 namespace DDDTalk.Presentation.Products
 {
-    /// <summary>
-    /// Interaction logic for ProductInfoView.xaml
-    /// </summary>
+    /// <remarks>
+    /// View
+    /// - Markup, layout and styles only
+    /// - No behaviour and no code
+    /// - Data bind to the ViewModel
+    /// </remarks>
     public partial class ProductInfoView
     {
         public ProductInfoView()

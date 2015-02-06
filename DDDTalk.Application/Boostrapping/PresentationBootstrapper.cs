@@ -23,7 +23,7 @@ namespace DDDTalk.Application.Boostrapping
             this.container.Register<ProductInfoViewModel>();
 
             // Register the main window
-            this.container.Register<IMainWindow, MainWindow>();
+            this.container.Register<IMainWindow, Shell>();
 
             // Initialize other presentation services...
         }

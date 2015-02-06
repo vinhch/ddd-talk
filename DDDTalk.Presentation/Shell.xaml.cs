@@ -4,12 +4,13 @@ using DDDTalk.Infrastructure.Navigation;
 
 namespace DDDTalk.Presentation
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : IMainWindow
+    /// <remarks>
+    /// Shell
+    /// - Application shell
+    /// </remarks>
+    public partial class Shell : IMainWindow
     {
-        public MainWindow()
+        public Shell()
         {
             this.InitializeComponent();
         }
