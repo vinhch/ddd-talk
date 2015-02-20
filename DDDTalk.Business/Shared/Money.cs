@@ -8,7 +8,16 @@
     ///     - Date integrity
     ///     - Performance
     /// </summary>
-    public struct Money
+    public class Money
     {
+        public Money(decimal amount, Currency currency)
+        {
+            this.Amount = amount;
+            this.Currency = currency;
+        }
+
+        public decimal Amount { get; private set; }
+        
+        public Currency Currency { get; private set; }
     }
 }
