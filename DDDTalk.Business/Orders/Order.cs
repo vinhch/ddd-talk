@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using DDDTalk.Infrastructure.Persistence;
@@ -9,7 +8,7 @@ namespace DDDTalk.Business.Orders
 {
     public class Order : IAggregateRoot, IAuditable
     {
-        private List<OrderLine> orderLines;
+        private readonly List<OrderLine> orderLines;
 
         public Order()
         {
@@ -34,11 +33,27 @@ namespace DDDTalk.Business.Orders
             }
         }
 
-        public void AddOrderLine(int productId, int quantity, string comment)
+        public void AddOrderLine(int productId, int quantity)
         {
-            var orderLine = OrderFactory.CreateOrderLineWithComment(productId, quantity, comment);
+            var orderLine = OrderFactory.CreateOrderLine(productId, quantity);
 
             this.orderLines.Add(orderLine);
+        }
+
+        public void AddOrderLine(int productId, int quantity, string comment)
+        {
+            var orderLine = this.orderLines.SingleOrDefault(ol => ol.ProductId == productId);
+
+            if (orderLine == null)
+            {
+                orderLine = OrderFactory.CreateOrderLineWithComment(productId, quantity, comment);
+                this.orderLines.Add(orderLine);
+            }
+            else
+            {
+                orderLine.AddQuantity(quantity);
+                orderLine.ReplaceComment(comment);
+            }
         }
 
         public void RemoveOrderLine(Guid lineId)
@@ -53,6 +68,16 @@ namespace DDDTalk.Business.Orders
         public void EmptyOrder()
         {
             this.orderLines.Clear();
+        }
+
+        public override string ToString()
+        {
+            var linesInfo = this.OrderLines.Select(ol => 
+                string.Format("  LineId: {0}, ProductId: {1}, Quantity: {2}, Comment: {3}", 
+                    ol.LineId, ol.ProductId, ol.Quantity, ol.Comment));
+
+            return string.Format("Id: {0}{1}{2}", 
+                this.Id, Environment.NewLine, string.Join(Environment.NewLine, linesInfo));
         }
     }
 }
