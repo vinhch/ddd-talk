@@ -42,6 +42,9 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Orders\Order.cs" />
+    <Compile Include="Orders\OrderFactory.cs" />
+    <Compile Include="Orders\OrderLine.cs" />
     <Compile Include="Shared\Currency.cs" />
     <Compile Include="Shared\StorageSize.cs" />
     <Compile Include="Shared\Dimensions.cs" />
@@ -64,7 +67,6 @@
     <Folder Include="Catalogs\" />
     <Folder Include="Customers\" />
     <Folder Include="Inventories\" />
-    <Folder Include="Orders\" />
     <Folder Include="Procurement\" />
     <Folder Include="ShoppingCarts\" />
     <Folder Include="Warehouses\" />
