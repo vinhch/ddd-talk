@@ -8,11 +8,11 @@ namespace DDDTalk.Business.Orders
 {
     public class Order : IAggregateRoot, IAuditable
     {
-        private readonly List<OrderLine> orderLines;
+        //private readonly List<OrderLine> orderLines;
 
         public Order()
         {
-            this.orderLines = new List<OrderLine>();
+            this.OrderLines = new List<OrderLine>();
         }
 
         public int Id { get; set; }
@@ -25,29 +25,27 @@ namespace DDDTalk.Business.Orders
 
         public string ModificationDate { get; set; }
 
-        public IEnumerable<OrderLine> OrderLines
-        {
-            get
-            {
-                return this.orderLines;
-            }
+        public ICollection<OrderLine> OrderLines { get; private set; //get
+            //{
+            //    return this.orderLines;
+            //}
         }
 
         public void AddOrderLine(int productId, int quantity)
         {
             var orderLine = OrderFactory.CreateOrderLine(productId, quantity);
 
-            this.orderLines.Add(orderLine);
+            this.OrderLines.Add(orderLine);
         }
 
         public void AddOrderLine(int productId, int quantity, string comment)
         {
-            var orderLine = this.orderLines.SingleOrDefault(ol => ol.ProductId == productId);
+            var orderLine = this.OrderLines.SingleOrDefault(ol => ol.ProductId == productId);
 
             if (orderLine == null)
             {
                 orderLine = OrderFactory.CreateOrderLineWithComment(productId, quantity, comment);
-                this.orderLines.Add(orderLine);
+                this.OrderLines.Add(orderLine);
             }
             else
             {
@@ -58,16 +56,16 @@ namespace DDDTalk.Business.Orders
 
         public void RemoveOrderLine(Guid lineId)
         {
-            var orderLineToRemove = this.orderLines.SingleOrDefault(ol => ol.LineId == lineId);
+            var orderLineToRemove = this.OrderLines.SingleOrDefault(ol => ol.LineId == lineId);
 
             if (orderLineToRemove == null) throw new ArgumentException("lineId " + lineId + " is not in the Order");
 
-            this.orderLines.Remove(orderLineToRemove);
+            this.OrderLines.Remove(orderLineToRemove);
         }
 
         public void EmptyOrder()
         {
-            this.orderLines.Clear();
+            this.OrderLines.Clear();
         }
 
         public override string ToString()

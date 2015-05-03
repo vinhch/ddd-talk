@@ -316,15 +316,13 @@ namespace DDDTalk.UnitTests
 
         public class OrderServiceTestsWithEquals
         {
-            private readonly ITestOutputHelper output;
             private readonly Fixture fixture;
 
             private readonly IOrderRepository fakeOrderRepository;
             private readonly OrderService orderService;
 
-            public OrderServiceTestsWithEquals(ITestOutputHelper output)
+            public OrderServiceTestsWithEquals()
             {
-                this.output = output;
                 this.fixture = new Fixture();
 
                 this.fakeOrderRepository = A.Fake<IOrderRepository>();
@@ -335,35 +333,38 @@ namespace DDDTalk.UnitTests
             [Fact]
             public void AddProductToOrder_ForExistingOrder_ShouldSaveOrderWithTheNewProduct()
             {
-                var orderId = this.fixture.Create<int>();
                 var productId = this.fixture.Create<int>();
                 var quantity = this.fixture.Create<int>();
-                const int NumberOfLine = 2;
 
                 // Arrange
-                var existingOrder = this.CreateSomeOrder(orderId, NumberOfLine);
+                var existingOrder = Create<Order>();
 
                 var expectedOrder = CreateFrom(existingOrder, o => 
-                    o.AddOrderLine(productId, quantity));
+                    o.OrderLines.Add(Create<OrderLine>(ol =>
+                    {
+                        ol.ProductId = productId;
+                        ol.Quantity = quantity;
+                    })));
 
                 this.ArrangeOrderRepositoryLoadOrderReturns(existingOrder);
 
                 // Act
-                this.orderService.AddProductToOrder(orderId, productId, quantity);
+                this.orderService.AddProductToOrder(existingOrder.Id, productId, quantity);
 
                 // Assert
                 this.AssertOrderRepositorySaveOrderWith(expectedOrder);
             }
 
-            private Order CreateSomeOrder(int orderId, int numberOfLine)
+            private static T Create<T>(Action<T> action = null) where T : class, new()
             {
-                var existingOrder = new Order { Id = orderId };
-                for (var i = 0; i < numberOfLine; i++)
+                var result = new T();
+
+                if (action != null)
                 {
-                    existingOrder.AddOrderLine(this.fixture.Create<int>(), this.fixture.Create<int>());
+                    action.Invoke(result);
                 }
 
-                return existingOrder;
+                return result;
             }
 
             private static T CreateFrom<T>(T template, Action<T> action = null) where T : class, new()
