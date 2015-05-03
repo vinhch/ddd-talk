@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using DDDTalk.Business.Orders;
 
 using FakeItEasy;
+
+using Fasterflect;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 using Ploeh.AutoFixture;
 
@@ -217,6 +223,189 @@ namespace DDDTalk.UnitTests
                     o.OrderLines.ElementAt(expectedCount - 1).ProductId == expectedNewProductId &&
                     o.OrderLines.ElementAt(expectedCount - 1).Quantity == expectedNewQuantity)))
                     .MustHaveHappened();
+            }
+        }
+
+        #endregion
+
+        #region Easy to understand failure message
+
+        public class OrderServiceTestsWithClearOutput
+        {
+            private readonly ITestOutputHelper output;
+            private readonly Fixture fixture;
+
+            private readonly IOrderRepository fakeOrderRepository;
+            private readonly OrderService orderService;
+
+            public OrderServiceTestsWithClearOutput(ITestOutputHelper output)
+            {
+                this.output = output;
+                this.fixture = new Fixture();
+
+                this.fakeOrderRepository = A.Fake<IOrderRepository>();
+
+                this.orderService = new OrderService(this.fakeOrderRepository);
+            }
+
+            [Fact]
+            public void AddProductToOrder_ForExistingOrder_ShouldSaveOrderWithTheNewProduct()
+            {
+                var orderId = this.fixture.Create<int>();
+                var productId = this.fixture.Create<int>();
+                var quantity = this.fixture.Create<int>();
+                const int NumberOfLine = 2;
+
+                // Arrange
+                var existingOrder = this.CreateSomeOrder(orderId, NumberOfLine);
+
+                this.ArrangeOrderRepositoryLoadOrderReturns(existingOrder);
+
+                // Act
+                this.orderService.AddProductToOrder(orderId, productId, quantity + 1);
+
+                // Assert
+                this.AssertOrderRepositorySaveOrderWith(expectedCount: NumberOfLine + 1, expectedNewProductId: productId, expectedNewQuantity: quantity);
+            }
+
+            private Order CreateSomeOrder(int orderId, int numberOfLine)
+            {
+                var existingOrder = new Order { Id = orderId };
+                for (var i = 0; i < numberOfLine; i++)
+                {
+                    existingOrder.AddOrderLine(this.fixture.Create<int>(), this.fixture.Create<int>());
+                }
+
+                return existingOrder;
+            }
+
+            private void ArrangeOrderRepositoryLoadOrderReturns(Order existingOrder)
+            {
+                A.CallTo(() => this.fakeOrderRepository.LoadOrder(existingOrder.Id)).Returns(existingOrder);
+            }
+
+            private void AssertOrderRepositorySaveOrderWith(int expectedCount, int expectedNewProductId, int expectedNewQuantity)
+            {
+                A.CallTo(() => this.fakeOrderRepository.SaveOrder(A<Order>.That.Matches(actualOrder =>
+                    this.OrderEquals(expectedCount, expectedNewProductId, expectedNewQuantity, actualOrder, "SaveOrder"))))
+                    .MustHaveHappened();
+            }
+
+            private bool OrderEquals(int expectedCount, int expectedNewProductId, int expectedNewQuantity, Order actualOrder, string messageSuffix)
+            {
+                var result = expectedCount == actualOrder.OrderLines.Count()
+                    && expectedNewProductId == actualOrder.OrderLines.Last().ProductId
+                    && expectedNewQuantity == actualOrder.OrderLines.Last().Quantity;
+
+                if (!result)
+                {
+                    this.output.WriteLine("Expected ProductId: {0}", expectedNewProductId);
+                    this.output.WriteLine("Expected Quantity: {0}", expectedNewQuantity);
+
+                    this.output.WriteLine("Actual Order: {0}", actualOrder.ToString());
+                    Assert.True(result, "Orders doesn't match on " + messageSuffix);
+                }
+
+                return result;
+            }
+        }
+
+        #endregion
+
+        #region Compare state
+
+        public class OrderServiceTestsWithEquals
+        {
+            private readonly ITestOutputHelper output;
+            private readonly Fixture fixture;
+
+            private readonly IOrderRepository fakeOrderRepository;
+            private readonly OrderService orderService;
+
+            public OrderServiceTestsWithEquals(ITestOutputHelper output)
+            {
+                this.output = output;
+                this.fixture = new Fixture();
+
+                this.fakeOrderRepository = A.Fake<IOrderRepository>();
+
+                this.orderService = new OrderService(this.fakeOrderRepository);
+            }
+
+            [Fact]
+            public void AddProductToOrder_ForExistingOrder_ShouldSaveOrderWithTheNewProduct()
+            {
+                var orderId = this.fixture.Create<int>();
+                var productId = this.fixture.Create<int>();
+                var quantity = this.fixture.Create<int>();
+                const int NumberOfLine = 2;
+
+                // Arrange
+                var existingOrder = this.CreateSomeOrder(orderId, NumberOfLine);
+
+                var expectedOrder = CreateFrom(existingOrder, o => 
+                    o.AddOrderLine(productId, quantity));
+
+                this.ArrangeOrderRepositoryLoadOrderReturns(existingOrder);
+
+                // Act
+                this.orderService.AddProductToOrder(orderId, productId, quantity);
+
+                // Assert
+                this.AssertOrderRepositorySaveOrderWith(expectedOrder);
+            }
+
+            private Order CreateSomeOrder(int orderId, int numberOfLine)
+            {
+                var existingOrder = new Order { Id = orderId };
+                for (var i = 0; i < numberOfLine; i++)
+                {
+                    existingOrder.AddOrderLine(this.fixture.Create<int>(), this.fixture.Create<int>());
+                }
+
+                return existingOrder;
+            }
+
+            private static T CreateFrom<T>(T template, Action<T> action = null) where T : class, new()
+            {
+                var result = template.DeepClone();
+
+                if (action != null)
+                {
+                    action.Invoke(result);
+                }
+
+                return result;
+            }
+
+            private void ArrangeOrderRepositoryLoadOrderReturns(Order existingOrder)
+            {
+                A.CallTo(() => this.fakeOrderRepository.LoadOrder(existingOrder.Id)).Returns(existingOrder);
+            }
+
+            private void AssertOrderRepositorySaveOrderWith(Order expectedOrder)
+            {
+                A.CallTo(() => this.fakeOrderRepository.SaveOrder(A<Order>.That.Matches(actualOrder =>
+                    OrderEquals(expectedOrder, actualOrder, "For OrderRepository.SaveOrder"))))
+                    .MustHaveHappened();
+            }
+
+            private static bool OrderEquals(Order expectedOrder, Order actualOrder, string messageSuffix)
+            {
+                // expectedOrder.OrderLines.ForEach(ol => ol.LineId = Guid.Empty);
+                // actualOrder.OrderLines.ForEach(ol => ol.LineId = Guid.Empty);
+                AssertEqualWithJsonOutput(expectedOrder, actualOrder, messageSuffix);
+
+                return true;
+            }
+
+            private static void AssertEqualWithJsonOutput<T>(T expectedObject, T actualObject, string message = "")
+            {
+                Assert.Equal(JsonConvert.SerializeObject(expectedObject), JsonConvert.SerializeObject(actualObject));
+
+                var logs = new List<string>();
+                JsonCompareHelper.Compare(logs, JToken.FromObject(expectedObject), JToken.FromObject(actualObject));
+                Assert.True(logs.Count == 0, message + Environment.NewLine + string.Join(Environment.NewLine, logs));
             }
         }
 

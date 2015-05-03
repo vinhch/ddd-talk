@@ -5,6 +5,8 @@ using DDDTalk.Business.Orders;
 
 using FakeItEasy;
 
+using Ploeh.AutoFixture;
+
 using Xunit;
 using Xunit.Abstractions;
 
@@ -170,6 +172,162 @@ namespace DDDTalk.UnitTests
                     o.OrderLines.ElementAt(expectedCount - 1).ProductId == expectedNewProductId &&
                     o.OrderLines.ElementAt(expectedCount - 1).Quantity == expectedNewQuantity)))
                     .MustHaveHappened();
+            }
+        }
+
+        #endregion
+
+        #region Easy to understand failure message
+
+        public class OrderServiceTestsWithoutClearOutput
+        {
+            private readonly ITestOutputHelper output;
+            private readonly Fixture fixture;
+
+            private readonly IOrderRepository fakeOrderRepository;
+            private readonly OrderService orderService;
+
+            public OrderServiceTestsWithoutClearOutput(ITestOutputHelper output)
+            {
+                this.output = output;
+                this.fixture = new Fixture();
+
+                this.fakeOrderRepository = A.Fake<IOrderRepository>();
+
+                this.orderService = new OrderService(this.fakeOrderRepository);
+            }
+
+            [Fact]
+            public void AddProductToOrder_ForExistingOrder_ShouldSaveOrderWithTheNewProduct()
+            {
+                var orderId = this.fixture.Create<int>();
+                var productId = this.fixture.Create<int>();
+                var quantity = this.fixture.Create<int>();
+                const int NumberOfLine = 2;
+
+                this.output.WriteLine("OrderId: {0}", orderId);
+                this.output.WriteLine("ProductId: {0}", productId);
+                this.output.WriteLine("Quantity: {0}", quantity);
+
+                // Arrange
+                var existingOrder = this.CreateSomeOrder(orderId, NumberOfLine);
+
+                this.ArrangeOrderRepositoryLoadOrderReturns(existingOrder);
+
+                // Act
+                this.orderService.AddProductToOrder(orderId, productId, quantity + 1);
+
+                // Assert
+                this.AssertOrderRepositorySaveOrderWith(expectedCount: NumberOfLine + 1, expectedNewProductId: productId, expectedNewQuantity: quantity);
+            }
+
+            private Order CreateSomeOrder(int orderId, int numberOfLine)
+            {
+                var existingOrder = new Order { Id = orderId };
+                for (var i = 0; i < numberOfLine; i++)
+                {
+                    existingOrder.AddOrderLine(this.fixture.Create<int>(), this.fixture.Create<int>());
+                }
+
+                return existingOrder;
+            }
+
+            private void ArrangeOrderRepositoryLoadOrderReturns(Order existingOrder)
+            {
+                A.CallTo(() => this.fakeOrderRepository.LoadOrder(existingOrder.Id)).Returns(existingOrder);
+            }
+
+            private void AssertOrderRepositorySaveOrderWith(int expectedCount, int expectedNewProductId, int expectedNewQuantity)
+            {
+                A.CallTo(() => this.fakeOrderRepository.SaveOrder(A<Order>.That.Matches(o =>
+                    o.OrderLines.Count() == expectedCount &&
+                    o.OrderLines.ElementAt(expectedCount - 1).ProductId == expectedNewProductId &&
+                    o.OrderLines.ElementAt(expectedCount - 1).Quantity == expectedNewQuantity)))
+                    .MustHaveHappened();
+            }
+        }
+
+        #endregion
+
+        #region Compare state
+
+        public class OrderServiceTestsWithoutEquals
+        {
+            private readonly ITestOutputHelper output;
+            private readonly Fixture fixture;
+
+            private readonly IOrderRepository fakeOrderRepository;
+            private readonly OrderService orderService;
+
+            public OrderServiceTestsWithoutEquals(ITestOutputHelper output)
+            {
+                this.output = output;
+                this.fixture = new Fixture();
+
+                this.fakeOrderRepository = A.Fake<IOrderRepository>();
+
+                this.orderService = new OrderService(this.fakeOrderRepository);
+            }
+
+            [Fact]
+            public void AddProductToOrder_ForExistingOrder_ShouldSaveOrderWithTheNewProduct()
+            {
+                var orderId = this.fixture.Create<int>();
+                var productId = this.fixture.Create<int>();
+                var quantity = this.fixture.Create<int>();
+                const int NumberOfLine = 2;
+
+                // Arrange
+                var existingOrder = this.CreateSomeOrder(orderId, NumberOfLine);
+
+                this.ArrangeOrderRepositoryLoadOrderReturns(existingOrder);
+
+                // Act
+                this.orderService.AddProductToOrder(orderId, productId, quantity);
+
+                // Assert
+                this.AssertOrderRepositorySaveOrderWith(expectedCount: NumberOfLine + 1, expectedNewProductId: productId, expectedNewQuantity: quantity);
+            }
+
+            private Order CreateSomeOrder(int orderId, int numberOfLine)
+            {
+                var existingOrder = new Order { Id = orderId };
+                for (var i = 0; i < numberOfLine; i++)
+                {
+                    existingOrder.AddOrderLine(this.fixture.Create<int>(), this.fixture.Create<int>());
+                }
+
+                return existingOrder;
+            }
+
+            private void ArrangeOrderRepositoryLoadOrderReturns(Order existingOrder)
+            {
+                A.CallTo(() => this.fakeOrderRepository.LoadOrder(existingOrder.Id)).Returns(existingOrder);
+            }
+
+            private void AssertOrderRepositorySaveOrderWith(int expectedCount, int expectedNewProductId, int expectedNewQuantity)
+            {
+                A.CallTo(() => this.fakeOrderRepository.SaveOrder(A<Order>.That.Matches(actualOrder =>
+                    this.OrderEquals(expectedCount, expectedNewProductId, expectedNewQuantity, actualOrder, "SaveOrder"))))
+                    .MustHaveHappened();
+            }
+
+            private bool OrderEquals(int expectedCount, int expectedNewProductId, int expectedNewQuantity, Order actualOrder, string messageSuffix)
+            {
+                var result = expectedCount == actualOrder.OrderLines.Count()
+                    && expectedNewProductId == actualOrder.OrderLines.Last().ProductId
+                    && expectedNewQuantity == actualOrder.OrderLines.Last().Quantity;
+
+                if (!result)
+                {
+                    this.output.WriteLine("Expected ProductId: {0}", expectedNewProductId);
+                    this.output.WriteLine("Expected Quantity: {0}", expectedNewQuantity);
+
+                    this.output.WriteLine("Actual Order: {0}", actualOrder.ToString());
+                    Assert.True(result, "Orders doesn't match on " + messageSuffix);
+                }
+
+                return result;
             }
         }
 
