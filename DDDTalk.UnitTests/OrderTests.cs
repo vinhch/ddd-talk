@@ -6,6 +6,7 @@ using DDDTalk.Business.Orders;
 using FakeItEasy;
 
 using Xunit;
+using Xunit.Abstractions;
 
 namespace DDDTalk.UnitTests
 {
@@ -103,6 +104,73 @@ namespace DDDTalk.UnitTests
                 o.OrderLines.ElementAt(2).ProductId == 34 && 
                 o.OrderLines.ElementAt(2).Quantity == 56)))
                 .MustHaveHappened();
+        }
+
+        #endregion
+
+        #region Only pertinent literals tests
+
+        public class OrderServiceTestsWithoutAutoFixture
+        {
+            private readonly ITestOutputHelper output;
+
+            private readonly IOrderRepository fakeOrderRepository;
+            private readonly OrderService orderService;
+
+            public OrderServiceTestsWithoutAutoFixture(ITestOutputHelper output)
+            {
+                this.output = output;
+
+                this.fakeOrderRepository = A.Fake<IOrderRepository>();
+                this.orderService = new OrderService(this.fakeOrderRepository);
+            }
+
+            [Fact]
+            public void AddProductToOrder_ForExistingOrder_ShouldSaveOrderWithTheNewProduct()
+            {
+                const int OrderId = 12;
+                const int NumberOfLine = 2;
+
+                this.output.WriteLine("OrderId: {0}", OrderId);
+                // this.output.WriteLine("ProductId: {0}", productId);
+                // this.output.WriteLine("Quantity: {0}", quantity);
+
+                // Arrange
+                var existingOrder = CreateSomeOrder(OrderId, NumberOfLine);
+
+                this.ArrangeOrderRepositoryLoadOrderReturns(existingOrder);
+
+                // Act
+                this.orderService.AddProductToOrder(OrderId, productId: 34, quantity: 56);
+
+                // Assert
+                this.AssertOrderRepositorySaveOrderWith(expectedCount: NumberOfLine + 1, expectedNewProductId: 34, expectedNewQuantity: 56);
+            }
+
+            private static Order CreateSomeOrder(int orderId, int numberOfLine)
+            {
+                var existingOrder = new Order { Id = orderId };
+                for (var i = 0; i < numberOfLine; i++)
+                {
+                    existingOrder.AddOrderLine(12356 + i, 999);
+                }
+
+                return existingOrder;
+            }
+
+            private void ArrangeOrderRepositoryLoadOrderReturns(Order existingOrder)
+            {
+                A.CallTo(() => this.fakeOrderRepository.LoadOrder(existingOrder.Id)).Returns(existingOrder);
+            }
+
+            private void AssertOrderRepositorySaveOrderWith(int expectedCount, int expectedNewProductId, int expectedNewQuantity)
+            {
+                A.CallTo(() => this.fakeOrderRepository.SaveOrder(A<Order>.That.Matches(o =>
+                    o.OrderLines.Count() == expectedCount &&
+                    o.OrderLines.ElementAt(expectedCount - 1).ProductId == expectedNewProductId &&
+                    o.OrderLines.ElementAt(expectedCount - 1).Quantity == expectedNewQuantity)))
+                    .MustHaveHappened();
+            }
         }
 
         #endregion
