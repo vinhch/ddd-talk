@@ -8,8 +8,6 @@ namespace DDDTalk.Business.Orders
 {
     public class Order : IAggregateRoot, IAuditable
     {
-        //private readonly List<OrderLine> orderLines;
-
         public Order()
         {
             this.OrderLines = new List<OrderLine>();
@@ -25,11 +23,7 @@ namespace DDDTalk.Business.Orders
 
         public string ModificationDate { get; set; }
 
-        public ICollection<OrderLine> OrderLines { get; private set; //get
-            //{
-            //    return this.orderLines;
-            //}
-        }
+        public ICollection<OrderLine> OrderLines { get; private set; }
 
         public void AddOrderLine(int productId, int quantity)
         {

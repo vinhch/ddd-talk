@@ -337,10 +337,10 @@ namespace DDDTalk.UnitTests
                 var quantity = this.fixture.Create<int>();
 
                 // Arrange
-                var existingOrder = Create<Order>();
+                var existingOrder = this.Create<Order>();
 
                 var expectedOrder = CreateFrom(existingOrder, o => 
-                    o.OrderLines.Add(Create<OrderLine>(ol =>
+                    o.OrderLines.Add(this.Create<OrderLine>(ol =>
                     {
                         ol.ProductId = productId;
                         ol.Quantity = quantity;
@@ -355,9 +355,9 @@ namespace DDDTalk.UnitTests
                 this.AssertOrderRepositorySaveOrderWith(expectedOrder);
             }
 
-            private static T Create<T>(Action<T> action = null) where T : class, new()
+            private T Create<T>(Action<T> action = null) where T : class, new()
             {
-                var result = new T();
+                var result = this.fixture.Create<T>();
 
                 if (action != null)
                 {
