@@ -133,10 +133,6 @@ namespace DDDTalk.UnitTests
                 const int OrderId = 12;
                 const int NumberOfLine = 2;
 
-                this.output.WriteLine("OrderId: {0}", OrderId);
-                // this.output.WriteLine("ProductId: {0}", productId);
-                // this.output.WriteLine("Quantity: {0}", quantity);
-
                 // Arrange
                 var existingOrder = CreateSomeOrder(OrderId, NumberOfLine);
 

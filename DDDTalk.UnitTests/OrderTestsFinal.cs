@@ -133,7 +133,7 @@ namespace DDDTalk.UnitTests
                 var existingOrder = new Order { Id = orderId };
                 for (var i = 0; i < numberOfLine; i++)
                 {
-                    existingOrder.AddOrderLine(12356 + i, 999);
+                    existingOrder.AddOrderLine(productId: 123456 + i, quantity: 999);
                 }
 
                 return existingOrder;
@@ -183,10 +183,6 @@ namespace DDDTalk.UnitTests
                 var productId = this.fixture.Create<int>();
                 var quantity = this.fixture.Create<int>();
                 const int NumberOfLine = 2;
-
-                this.output.WriteLine("OrderId: {0}", orderId);
-                this.output.WriteLine("ProductId: {0}", productId);
-                this.output.WriteLine("Quantity: {0}", quantity);
 
                 // Arrange
                 var existingOrder = this.CreateSomeOrder(orderId, NumberOfLine);
@@ -393,8 +389,8 @@ namespace DDDTalk.UnitTests
 
             private static bool OrderEquals(Order expectedOrder, Order actualOrder, string messageSuffix)
             {
-                // expectedOrder.OrderLines.ForEach(ol => ol.LineId = Guid.Empty);
-                // actualOrder.OrderLines.ForEach(ol => ol.LineId = Guid.Empty);
+                expectedOrder.OrderLines.ForEach(ol => ol.LineId = Guid.Empty);
+                actualOrder.OrderLines.ForEach(ol => ol.LineId = Guid.Empty);
                 AssertEqualWithJsonOutput(expectedOrder, actualOrder, messageSuffix);
 
                 return true;
@@ -402,7 +398,7 @@ namespace DDDTalk.UnitTests
 
             private static void AssertEqualWithJsonOutput<T>(T expectedObject, T actualObject, string message = "")
             {
-                Assert.Equal(JsonConvert.SerializeObject(expectedObject), JsonConvert.SerializeObject(actualObject));
+                //Assert.Equal(JsonConvert.SerializeObject(expectedObject), JsonConvert.SerializeObject(actualObject));
 
                 var logs = new List<string>();
                 JsonCompareHelper.Compare(logs, JToken.FromObject(expectedObject), JToken.FromObject(actualObject));
